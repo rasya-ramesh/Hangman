@@ -1,0 +1,84 @@
+<html>
+<head>
+    <title> Let's Play Hangman! </title>
+</head>
+<style>
+body{
+    text-align:center;
+}
+</style>
+<body>
+    <center><h1> Hangman </h1>
+            <h3> Cast a SPELL to save this man </h3>
+            <div id="gamearea">
+                <button onclick="game();"> Let's Play! </button>
+            </div>
+    </center>
+</body>
+<script>
+
+function game()
+{
+    var movies = ['The Chronicles Of Narnia','The Kite Runner','The Hunger Games','The Fault in Our Stars','Interstellar','Mean Girls','The Hangover','Toy Story',"A Bug's Life",'Finding Nemo'];
+    var movie=movies[Math.floor(movies.length*Math.random())];
+    var i=0;
+    var div=document.getElementById("gamearea");
+    div.textContent='';
+    for(i=0; i<movie.length;i++)
+    {
+        switch(movie[i])
+        {
+            case 'a':
+            case 'A':
+            case 'e':
+            case 'E':
+            case 'i':
+            case 'I':
+            case 'o':
+            case 'O':
+            case 'u':
+            case 'U':
+                div.textContent+=movie[i];
+                break;
+            case ' ':
+                div.textContent+=' / ';
+                break;
+            default:
+                div.textContent+=' _ ';
+                break;
+        }
+    }
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
+
+    var textbox=document.createElement("input");
+    textbox.setAttribute("type","text");
+    textbox.setAttribute("maxlength","1");
+    textbox.setAttribute("id","textbox");
+    div.appendChild(textbox);
+
+    var submit=document.createElement("button");
+    submit.textContent="Make a guess";
+    submit.addEventListener("click",function(){
+        checkletter(movie); },false);
+
+    div.appendChild(submit);
+}
+function checkletter(moviename)
+{
+    //function to check if the letter is there in the movie name
+    var textbox=document.getElementById("textbox");
+    alert(textbox.value);
+    alert(moviename);
+    hang_the_man();
+}
+hang_the_man.i=0;
+function hang_the_man()
+{
+    //function to be called whenever the letter entered is wrong. hang_the_man.i here is static,
+    //so you can use it to decide which picture to display
+    alert(hang_the_man.i);
+    hang_the_man.i++;
+}
+</script>
+</html>
