@@ -5,22 +5,54 @@
 <style>
 body{
     text-align:center;
+    font-family:'Helvetica';
+    color:white;
+    background-image: url("hangman.jpg");
+    background-size: 1500px 700px;
+    background-repeat: no-repeat;
+}
+h1{
+    font-size: 50px;
+}
+
+button{
+    background-color: Black;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+}
+#name{
+    font-size: 30px;
+}
+#gamearea{
+    font-size:20px;
 }
 </style>
 <body>
     <center><h1> Hangman </h1>
             <h3> Cast a SPELL to save this man </h3>
+            <hr/><hr/><br>
             <div id="gamearea">
                 <button onclick="game();"> Let's Play! </button>
             </div>
     </center>
 </body>
 <script>
-
+var num=-1;
 function game()
 {
-    var movies = ['The Chronicles Of Narnia','The Kite Runner','The Hunger Games','The Fault in Our Stars','Interstellar','Mean Girls','The Hangover','Toy Story',"A Bug's Life",'Finding Nemo'];
-    var num = Math.floor(movies.length*Math.random());
+    document.body.style.backgroundColor="black";
+    var movies = ['Life of Pi','The Matrix','Jurassic Park','The Curious Case of Benjamin Button','Slumdog Millionaire','The Good the Bad and the Ugly','The Princess Diaries','Star Trek','The Terminator','Ratatouille','Aladdin','The Simpsons Movie','Blood Diamond','The Godfather','Gone with the Wind',"Schindler's List",'To Kill A Mockingbird','The Shawshank Redemption','The Chronicles Of Narnia','The Kite Runner','The Hunger Games','The Fault in Our Stars','Interstellar','Mean Girls','The Hangover','Toy Story',"A Bug's Life",'Finding Nemo'];
+    if(num<0)
+        var num = Math.floor(movies.length*Math.random());
+    else {
+        var x=num;
+        while(num==x)
+            num = Math.floor(movies.length*Math.random());
+    }
     var movie=movies[num];
     var i=0;
     var div=document.getElementById("gamearea");
@@ -42,6 +74,7 @@ function game()
             case 'O':
             case 'u':
             case 'U':
+            case "'":
                 text.textContent+=' '+movie[i]+' ';
                 break;
             case ' ':
@@ -58,8 +91,8 @@ function game()
     var image=document.createElement("img");
     image.setAttribute("id","pic");
     image.setAttribute("src","0.png");
-    image.setAttribute("height","100px");
-    image.setAttribute("width","100px");
+    image.setAttribute("height","200px");
+    image.setAttribute("width","200px");
     div.appendChild(image);
     div.appendChild(document.createElement("br"));
     div.appendChild(document.createElement("br"));
@@ -68,7 +101,8 @@ function game()
     textbox.setAttribute("maxlength","1");
     textbox.setAttribute("id","textbox");
     div.appendChild(textbox);
-
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
     var submit=document.createElement("button");
     submit.textContent="Make a guess";
     submit.addEventListener("click",function(){
@@ -134,15 +168,42 @@ function checkletter(moviename)
         case 'O':
         case 'u':
         case 'U':
-            alert('Enter consonants for valid attempt');
+        case "'":
+        case '"':
+        case ':':
+        case ')':
+        case '*':
+        case '&':
+        case '^':
+        case '%':
+        case '$':
+        case '#':
+        case '@':
+        case '+':
+        case '-':
+        case '_':
+        case '!':
+        case '=':
+        case '{':
+        case '}':
+        case '[':
+        case ']':
+
+            resp.textContent='Enter consonants for valid attempt';
             return;
     }
     var disp = document.getElementById('name');
     var indices = finder(inp,moviename,0);
+    var low_inp= inp.toLowerCase()
     if(indices.length==0){
         var k = finder(inp,attempts.textContent,17);
         if(k.length==0){
-            attempts.textContent+=inp;
+            if(attempts.textContent=='Wrong Attempts : ')
+                attempts.textContent +=low_inp;
+            else {
+                attempts.textContent+=', ';
+                attempts.textContent+=low_inp;
+            }
             resp.textContent='Wrong Choice!!!';
             hang_the_man();
         }
@@ -169,7 +230,14 @@ function checkletter(moviename)
         }
         if(cnt==0){
             var stat=document.getElementById("stat");
+            var textbox=document.getElementById('textbox');
+            textbox.setAttribute("disabled","true");
             stat.textContent='CONGRATS! YOU WIN!';
+            var playagain=document.createElement("button");
+            playagain.textContent="Play Again";
+            playagain.addEventListener("click",reset,false);
+            stat.appendChild(playagain);
+
         }
     }
 
@@ -180,32 +248,50 @@ function hang_the_man()
     //function to be called whenever the letter entered is wrong. hang_the_man.i here is static,
     //so you can use it to decide which picture to display
     var image=document.getElementById("pic");
+    image.setAttribute("height","200px");
+    image.setAttribute("width","200px");
     switch(hang_the_man.i)
     {
         case 0:
-            image.setAttribute("src","1.jpeg");
+            image.setAttribute("src","1.png");
             break;
         case 1:
-            image.setAttribute("src","2.jpg");
+            image.setAttribute("src","2.png");
             break;
         case 2:
-            image.setAttribute("src","3.jpg");
+            image.setAttribute("src","3.png");
             break;
         case 3:
-            image.setAttribute("src","4.jpg");
+            image.setAttribute("src","4.png");
             break;
         case 4:
-            image.setAttribute("src","5.jpg");
+            image.setAttribute("src","5.png");
             break;
         case 5:
-            image.setAttribute("src","6.jpg");
-            document.getElementById('stat');
-            stat.textContent='SORRY YOU LOSE. TRY AGAIN LATER.';
+            image.setAttribute("src","6.png");
+            var stat=document.getElementById('stat');
+            var textbox=document.getElementById('textbox');
+            textbox.setAttribute("disabled","true");
+            stat.textContent='SORRY YOU LOSE. TRY AGAIN LATER.\n';
+            var playagain=document.createElement("button");
+            playagain.textContent="Play Again";
+            playagain.addEventListener("click",reset,false);
+            stat.appendChild(playagain);
             break;
     }
-    image.setAttribute("height","100px");
-    image.setAttribute("width","100px");
+    image.setAttribute("height","200px");
+    image.setAttribute("width","200px");
     hang_the_man.i++;
+}
+function reset()
+{
+    hang_the_man.i=0;
+    var image=document.getElementById("pic");
+    image.setAttribute("height","200px");
+    image.setAttribute("width","200px");
+
+    image.setAttribute("src","0.png");
+    game();
 }
 </script>
 </html>
