@@ -50,7 +50,12 @@ function game()
     }
     div.appendChild(document.createElement("br"));
     div.appendChild(document.createElement("br"));
-
+    var image=document.createElement("img");
+    image.setAttribute("id","pic");
+    image.setAttribute("src","0.png");
+    div.appendChild(image);
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
     var textbox=document.createElement("input");
     textbox.setAttribute("type","text");
     textbox.setAttribute("maxlength","1");
@@ -77,7 +82,28 @@ function hang_the_man()
 {
     //function to be called whenever the letter entered is wrong. hang_the_man.i here is static,
     //so you can use it to decide which picture to display
-    alert(hang_the_man.i);
+    var image=document.getElementById("pic");
+    switch(hang_the_man.i)
+    {
+        case 0:
+            image.setAttribute("src","1.jpeg");
+            break;
+        case 1:
+            image.setAttribute("src","2.jpg");
+            break;
+        case 2:
+            image.setAttribute("src","3.jpg");
+            break;
+        case 3:
+            image.setAttribute("src","4.jpg");
+            break;
+        case 4:
+            image.setAttribute("src","5.jpg");
+            break;
+        case 5:
+            image.setAttribute("src","6.jpg");
+            break;
+    }
     hang_the_man.i++;
 }
 </script>
