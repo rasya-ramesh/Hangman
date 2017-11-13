@@ -88,14 +88,20 @@ function game()
     attempts.setAttribute("id","attempts");
     attempts.fontSize=12;
     div.appendChild(attempts);
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
+    var stat=document.createElement("span");
+    stat.textContent='';
+    stat.setAttribute("id","stat");
+    stat.fontSize=12;
+    div.appendChild(stat);
 }
 
 function finder(char,str,beg){
     var indices = [];
     for(var i=beg; i<str.length;i++) {
-        if (str[i].toLowerCase() == char) indices.push(i);
+        if (str[i].toLowerCase() == char.toLowerCase()) indices.push(i);
     }
-    console.log('yolo',indices);
   return indices;
 }
 
@@ -109,6 +115,10 @@ function checkletter(moviename)
     //function to check if the letter is there in the movie name
     var textbox=document.getElementById("textbox");
     var inp= textbox.value;
+    if(inp==''){
+        alert("Please don't leave input blank.");
+        return;
+    }
     var resp=document.getElementById("resp");
     var attempts=document.getElementById("attempts");
     textbox.value='';
@@ -142,6 +152,7 @@ function checkletter(moviename)
     }
     else{
         var k =disp.textContent;
+
         for( i in indices){
 
             k=setCharAt(k,3*indices[i]+1,moviename[indices[i]]);
@@ -149,8 +160,19 @@ function checkletter(moviename)
 
         disp.textContent=k;
         resp.textContent='Good Attempt!!!';
-
+        var cnt=0;
+        for (i in k){
+            if (k[i]=='_'){
+                cnt+=1;
+                break;
+            }
+        }
+        if(cnt==0){
+            var stat=document.getElementById("stat");
+            stat.textContent='CONGRATS! YOU WIN!';
+        }
     }
+
 }
 hang_the_man.i=0;
 function hang_the_man()
@@ -177,6 +199,8 @@ function hang_the_man()
             break;
         case 5:
             image.setAttribute("src","6.jpg");
+            document.getElementById('stat');
+            stat.textContent='SORRY YOU LOSE. TRY AGAIN LATER.';
             break;
     }
     image.setAttribute("height","100px");
