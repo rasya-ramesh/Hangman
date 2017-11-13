@@ -20,10 +20,14 @@ body{
 function game()
 {
     var movies = ['The Chronicles Of Narnia','The Kite Runner','The Hunger Games','The Fault in Our Stars','Interstellar','Mean Girls','The Hangover','Toy Story',"A Bug's Life",'Finding Nemo'];
-    var movie=movies[Math.floor(movies.length*Math.random())];
+    var num = Math.floor(movies.length*Math.random());
+    var movie=movies[num];
     var i=0;
     var div=document.getElementById("gamearea");
+    var text=document.createElement("span");
     div.textContent='';
+    text.textContent='';
+    text.setAttribute('id','name')
     for(i=0; i<movie.length;i++)
     {
         switch(movie[i])
@@ -38,21 +42,24 @@ function game()
             case 'O':
             case 'u':
             case 'U':
-                div.textContent+=movie[i];
+                text.textContent+=' '+movie[i]+' ';
                 break;
             case ' ':
-                div.textContent+=' / ';
+                text.textContent+=' / ';
                 break;
             default:
-                div.textContent+=' _ ';
+                text.textContent+=' _ ';
                 break;
         }
     }
+    div.appendChild(text);
     div.appendChild(document.createElement("br"));
     div.appendChild(document.createElement("br"));
     var image=document.createElement("img");
     image.setAttribute("id","pic");
     image.setAttribute("src","0.png");
+    image.setAttribute("height","100px");
+    image.setAttribute("width","100px");
     div.appendChild(image);
     div.appendChild(document.createElement("br"));
     div.appendChild(document.createElement("br"));
@@ -66,16 +73,84 @@ function game()
     submit.textContent="Make a guess";
     submit.addEventListener("click",function(){
         checkletter(movie); },false);
-
     div.appendChild(submit);
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
+    var response=document.createElement("span");
+    response.textContent='';
+    response.setAttribute("id","resp");
+    response.fontSize=12;
+    div.appendChild(response);
+    div.appendChild(document.createElement("br"));
+    div.appendChild(document.createElement("br"));
+    var attempts=document.createElement("span");
+    attempts.textContent='Wrong Attempts : ';
+    attempts.setAttribute("id","attempts");
+    attempts.fontSize=12;
+    div.appendChild(attempts);
 }
+
+function finder(char,str,beg){
+    var indices = [];
+    for(var i=beg; i<str.length;i++) {
+        if (str[i].toLowerCase() == char) indices.push(i);
+    }
+    console.log('yolo',indices);
+  return indices;
+}
+
+function setCharAt(str,index,chr) {
+    if(index > str.length-1) return str;
+    return str.substr(0,index) + chr + str.substr(index+1);
+}
+
 function checkletter(moviename)
 {
     //function to check if the letter is there in the movie name
     var textbox=document.getElementById("textbox");
-    alert(textbox.value);
-    alert(moviename);
-    hang_the_man();
+    var inp= textbox.value;
+    var resp=document.getElementById("resp");
+    var attempts=document.getElementById("attempts");
+    textbox.value='';
+    switch(inp)
+    {
+        case 'a':
+        case 'A':
+        case 'e':
+        case 'E':
+        case 'i':
+        case 'I':
+        case 'o':
+        case 'O':
+        case 'u':
+        case 'U':
+            alert('Enter consonants for valid attempt');
+            return;
+    }
+    var disp = document.getElementById('name');
+    var indices = finder(inp,moviename,0);
+    if(indices.length==0){
+        var k = finder(inp,attempts.textContent,17);
+        if(k.length==0){
+            attempts.textContent+=inp;
+            resp.textContent='Wrong Choice!!!';
+            hang_the_man();
+        }
+        else{
+            alert('Already Attempted!! Try Something new!!');
+        }
+    }
+    else{
+        var k =disp.textContent;
+        for( i in indices){
+
+            k=setCharAt(k,3*indices[i]+1,moviename[indices[i]]);
+        }
+
+        disp.textContent=k;
+        resp.textContent='Good Attempt!!!';
+
+    }
 }
 hang_the_man.i=0;
 function hang_the_man()
@@ -104,6 +179,8 @@ function hang_the_man()
             image.setAttribute("src","6.jpg");
             break;
     }
+    image.setAttribute("height","100px");
+    image.setAttribute("width","100px");
     hang_the_man.i++;
 }
 </script>
